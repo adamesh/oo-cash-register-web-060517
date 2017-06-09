@@ -1,36 +1,38 @@
 
+require 'pry'
 class CashRegister
 
-  attr_accessor :total, :discount
+  attr_accessor :total, :discount, :items, :last_transaction, :items
 
   def initialize(discount = nil)
-    @discount = discount
-    @total = 0
-    @items = []
+    self.discount = discount
+    self.total = 0
+    self.items = []
+    self.last_transaction = {} #{title => price}
   end
 
   def add_item(title, price, quantity = 1)
-    @total += (price * quantity)
+    self.total += (price * quantity)
     quantity.times do
-      @items << title
+      self.items << title
     end
-    @last_transaction = {title => price}
+    self.last_transaction = {title => price}
   end
 
   def apply_discount
-    if @discount
-      @total -= @total * discount / 100
-      "After the discount, the total comes to $#{@total}."
+    if self.discount
+      self.total -= self.total * discount / 100
+      "After the discount, the total comes to $#{self.total}."
     else
       "There is no discount to apply."
     end
   end
 
   def items
-    @items
+    @items #for some reason, calling self.items runs forever. Why?!?!
   end
 
   def void_last_transaction
-    @total -= @last_transaction[@items.last]
+    self.total -= self.last_transaction[self.items.last]
   end
 end
